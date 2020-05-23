@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1주차 과제</title>
+
+    <!--구글 폰트-->
+    <link href="https://fonts.googleapis.com/css2?family=Stylish&display=swap" rel="stylesheet">
+
+    <!--부트스트랩 css-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!--부트스트랩 js-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <!-- ajax js-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <style>
+
+        *{
+            font-family: 'Stylish', sans-serif;
+        }
+
+        .content{
+            width:600px;
+            margin:auto;}
+
+
+        .product_img{
+            width:600px;
+            height:495px;
+            background-image:url('http://www.marketb.kr/web/product/big/20191118/9881c57cf5f0b25e002a2d5955725a38.jpg');
+            background-size: cover;
+            background-position:center;
+            margin-bottom:20px;
+            border:1px solid #000000;
+            border-radius: 10px;}
+        
+        .order_wrap{
+            width: 500px;
+            margin: auto;}
+        
+        .product_title{margin-bottom:30px;}
+
+        .product_title span{font-size:19px;}
+        
+        .input-group{margin-bottom:10px;}
+
+        .order_btn{
+            width: 100px;
+            margin: 20px auto;
+        }
+
+        .exchange_wrap{color:blue;}
+    </style>
+
+    <script>
+    // 핸드폰번호 정규식
+    var regExp = /^\d{3}-\d{3,4}-\d{4}$/;
+
+
+        function order(){
+          let orderer = $('#orderer').val();
+          let number = $('#number').val();
+          let address = $('#address').val();
+          let phoneNumber = $('#phoneNumber').val();
+
+
+          if ( orderer == '' ){
+            alert('이름을 입력해주세요.');
+          }else if( number == '' ){
+            alert('수량을 입력해주세요.');
+          }else if( address == '' ){
+            alert('주소를 입력해주세요.');
+          }else if( phoneNumber == '' ){
+            alert('전화번호를 입력해주세요.');
+          }else if(!regExp.test($('#phoneNumber').val())){
+
+          alert("휴대폰번호 입력 형식이 틀립니다. 010-0000-0000으로 입력주세요.");
+
+          return false
+
+          }
+
+        }
+
+        $(document).ready(function(){
+         exchange()
+      });
+
+        function exchange() {
+          
+        $.ajax({
+              type: "GET",
+              url: "https://api.manana.kr/exchange/rate.json",
+              data: {},
+              success: function (response) {
+
+               for(let i=0; i<response.length; i++){
+                 if(response[i]['name'] == 'USDKRW=X'){
+                  $('.exchange').text(response[i]['rate']);
+                    }
+                  }
+
+                //  let exchangeUSD = response[1]['rate'];
+                //  $('.exchange').text(exchangeUSD);
+  
+              }
+          })
+  
+      }
+
+    </script>
+</head>
+<body>
+    <div class="content">
+
+        
+        <div class="product_img"></div>
+        <div class="product_title">
+            <h2>마켓비 PEMBA  <span>가격: 59,900원 / 개</span></h2>
+            <p>깔끔한 디자인으로 어디서나 간편하게 두기 좋으며 어떤 가구와도 조화롭게 매치됩니다.
+                넓은 가로폭의 상판, 아래의 서랍으로 화장품이나 책, 인테리어 소품 등 다양한 물품을 수납할 수 있습니다.
+            </p>
+                    
+          <div class="exchange_wrap">
+            <p>달러-원 환율:<span class="exchange"></span></p>
+          </div>
+
+        </div>
+
+        <div class="order_wrap">
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text" id="btnGroupAddon">주문자 이름</div>
+                </div>
+                <input type="text" id="orderer" class="form-control" aria-label="Input group example" aria-describedby="btnGroupAddon">
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text" id="btnGroupAddon">수량</div>
+                </div>
+                <input type="number" id="number" class="form-control" placeholder="-- 수량을 선택하세요 --" aria-label="Input group example" aria-describedby="btnGroupAddon">
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text" id="btnGroupAddon">주소</div>
+                </div>
+                <input type="text" id="address" class="form-control" aria-label="Input group example" aria-describedby="btnGroupAddon">
+              </div>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text" id="btnGroupAddon">전화번호</div>
+                </div>
+                <input type="text" id="phoneNumber" class="form-control" aria-label="Input group example" aria-describedby="btnGroupAddon">
+              </div>
+              
+            <div class="order_btn">
+                <button onclick="order()" type="button" class="btn btn-primary">주문하기</button>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+</html>
