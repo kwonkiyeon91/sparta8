@@ -16,7 +16,7 @@ soup = BeautifulSoup(data.text, 'html.parser')
 music_chart = soup.select('table.list-wrap > tbody > tr')
 
 # movies (tr들) 의 반복문을 돌리기
-rank = 1
+rank = 0
 print(len(music_chart))
 for music in music_chart:
     #print(music)
@@ -31,7 +31,7 @@ for music in music_chart:
 
         #if rank == 1:
         #print(title)
-        title = title.replace('\n', '')
+        #title = title.replace('\n', '')
         #print(title)
         title = title.lstrip()
         #print(title)
@@ -45,6 +45,5 @@ for music in music_chart:
         }
         db.music_chart.insert_one(temp)
         rank += 1
-        print(temp)
-    else:
-        print(music)
+        print(rank, title, artist )
+
